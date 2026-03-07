@@ -1,7 +1,7 @@
 name: Build Tauri App
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:          # Allows manual trigger from GitHub UI
 
 jobs:
   build:
@@ -51,10 +51,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # Comment out to skip release creation
-          # tagName: v__VERSION__
-          # releaseName: "Expense Tracker __VERSION__"
-          # releaseBody: "Desktop builds for Linux, Windows, macOS. Plain HTML app."
-          # releaseDraft: true
-          # prerelease: false
-          uploadArtifacts: true
+          tagName: v0.1.0
+          releaseName: "Expense Tracker v0.1.0"
+          releaseBody: |
+            Simple expense tracker desktop app built with Tauri + plain HTML/CSS/JS.
+
+            **Downloads:**
+            - Linux: .deb (Debian/Ubuntu), .rpm (Fedora/openSUSE), .AppImage (portable)
+            - Windows: .exe installer
+            - macOS: .dmg / .app
+
+            **How to install:**
+            - .deb: sudo dpkg -i *.deb
+            - .rpm: sudo rpm -i *.rpm
+            - .AppImage: chmod +x *.AppImage && ./YourApp.AppImage
+            - .exe: Double-click the installer
+            - .dmg: Open and drag to Applications
+
+            Enjoy tracking your expenses!
+          releaseDraft: false
+          prerelease: false
