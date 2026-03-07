@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - FOSSarium</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <script>const s = localStorage.getItem('fossarium-theme'); if (s === 'light' || (!s && window.matchMedia('(prefers-color-scheme: light)').matches)) document.documentElement.classList.add('light-theme');</script>
+
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="theme-toggle-container">
+        <button id="theme-toggle" title="Toggle Light/Dark Theme">
+            <ion-icon name="sunny-outline"></ion-icon>
+        </button>
+    </div>
+
+    <div class="app-container tool-container-wrapper">
+        <div class="tool-header">
+            <h1>Expense Master</h1>
+            <p class="tool-subtitle">A simple, effective way to track your daily spending and manage your budget.</p>
+
+        </div>
+
+        <div class="expense-layout">
+            <div class="tool-card summary-card">
+                <div class="summary-header">
+                    <div class="summary-item">
+                        <label>Total Balance</label>
+                        <div id="total-balance" class="balance-val">0.00</div>
+                    </div>
+                    <div class="currency-selector-wrapper">
+                        <select id="currency-select" class="currency-dropdown">
+                            <option value="USD" data-symbol="$">USD ($)</option>
+                            <option value="INR" data-symbol="₹">INR (₹)</option>
+                            <option value="EUR" data-symbol="€">EUR (€)</option>
+                            <option value="GBP" data-symbol="£">GBP (£)</option>
+                            <option value="JPY" data-symbol="¥">JPY (¥)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="summary-details">
+                    <div class="sum-box income">
+                        <label>Income</label>
+                        <span id="total-income">0.00</span>
+                    </div>
+                    <div class="sum-box expense">
+                        <label>Expense</label>
+                        <span id="total-expense">0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card form-card">
+                <label>Add Transaction</label>
+                <div class="input-grid">
+                    <div class="field">
+                        <input type="text" id="desc" placeholder="What for? (e.g. Rent)">
+                    </div>
+                    <div class="field">
+                        <div class="amount-input">
+                            <span id="currency-symbol">$</span>
+                            <input type="number" id="amount" placeholder="0.00" step="0.01">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <select id="cat">
+                            <option value="Food">Food & Dining</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Health">Healthcare</option>
+                            <option value="Leisure">Entertainment</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="type-selector">
+                    <button class="type-btn active" data-type="expense">Expense</button>
+                    <button class="type-btn" data-type="income">Income</button>
+                </div>
+                <button onclick="addExpense()" class="btn primary-btn">
+                    <ion-icon name="add-circle-outline"></ion-icon> Save Transaction
+                </button>
+            </div>
+
+            <div class="tool-card list-card">
+                <div class="list-header">
+                    <label>Recent Transactions</label>
+                    <button id="clear-all" class="text-btn">Clear All</button>
+                </div>
+                <div class="expense-list" id="list">
+                    <!-- Transactions generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
