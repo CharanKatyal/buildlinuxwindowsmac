@@ -60,6 +60,7 @@ jobs:
             - Linux: .deb (Debian/Ubuntu), .rpm (Fedora/openSUSE), .AppImage (portable)
             - Windows: .exe installer
             - macOS: .dmg / .app
+            - Android: .apk / .aab
 
             **How to install:**
             - .deb: sudo dpkg -i *.deb
@@ -67,7 +68,70 @@ jobs:
             - .AppImage: chmod +x *.AppImage && ./YourApp.AppImage
             - .exe: Double-click the installer
             - .dmg: Open and drag to Applications
+            - .apk: Install directly on Android device
 
             Enjoy tracking your expenses!
           releaseDraft: false
           prerelease: false
+
+  android:
+    name: Build Android
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Add Rust Android targets
+        run: |
+          rustup target add aarch64-linux-android
+          rustup target add armv7-linux-androideabi
+          rustup target add i686-linux-android
+          rustup target add x86_64-linux-android
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Tauri CLI
+        run: npm install -g @tauri-apps/cli
+
+      - name: Install frontend deps
+        run: |
+          if [ -f package.json ]; then
+            npm install
+          fi
+
+      - name: Build frontend
+        run: |
+          if [ -f package.json ] && grep -q '"build"' package.json; then
+            npm run build
+          fi
+
+      - name: Init Android project
+        run: npx tauri android init
+
+      - name: Build Android APK and AAB
+        run: npx tauri android build
+
+      - name: Upload Android builds to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.1.0
+          files: |
+            src-tauri/gen/android/app/build/outputs/**/*.apk
+            src-tauri/gen/android/app/build/outputs/**/*.aab
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
