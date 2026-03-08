@@ -5,8 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["FOSS", "FOSSarium"],
+  "author": "FOSSarium",
   "license": "ISC",
-  "description": ""
+  "description": "FOSSarium's one more app"
 }
