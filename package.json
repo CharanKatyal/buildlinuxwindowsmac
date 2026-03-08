@@ -3,12 +3,7 @@
   "version": "1.0.0",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo \"Building frontend...\" && exit 0",
-    "tauri": "tauri build",
-    "tauri:dev": "tauri dev",
-    "tauri:android:init": "npx tauri android init",
-    "tauri:android:build": "npx tauri android build"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
