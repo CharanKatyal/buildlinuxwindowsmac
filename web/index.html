@@ -4,15 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker - FOSSarium</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <title>Age Calculator - FOSSarium</title>
     <link rel="stylesheet" href="styles.css">
-
     <!-- Ionicons -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script type="module" src="assets/icons/ionicons.esm.js"></script>
+    <script nomodule src="assets/icons/ionicons.js"></script>
 </head>
 
 <body>
@@ -31,79 +27,63 @@
 
     <div class="app-container tool-container-wrapper">
         <div class="tool-header">
-            <h1>Expense Master</h1>
-            <p class="tool-subtitle">A simple, effective way to track your daily spending and manage your budget.</p>
-
+            <h1>Age Master</h1>
+            <p class="tool-subtitle">Precision age calculation with detailed life milestones and fun facts.</p>
         </div>
 
-        <div class="expense-layout">
-            <div class="tool-card summary-card">
-                <div class="summary-header">
-                    <div class="summary-item">
-                        <label>Total Balance</label>
-                        <div id="total-balance" class="balance-val">0.00</div>
-                    </div>
-                    <div class="currency-selector-wrapper">
-                        <select id="currency-select" class="currency-dropdown">
-                            <option value="USD" data-symbol="$">USD ($)</option>
-                            <option value="INR" data-symbol="₹">INR (₹)</option>
-                            <option value="EUR" data-symbol="€">EUR (€)</option>
-                            <option value="GBP" data-symbol="£">GBP (£)</option>
-                            <option value="JPY" data-symbol="¥">JPY (¥)</option>
-                        </select>
+        <div class="age-layout">
+            <div class="tool-card control-card">
+                <div class="field">
+                    <label for="dob">Enter Date of Birth</label>
+                    <div class="input-wrapper">
+                        <ion-icon name="calendar-outline"></ion-icon>
+                        <input type="date" id="dob" value="2000-01-01">
                     </div>
                 </div>
-                <div class="summary-details">
-                    <div class="sum-box income">
-                        <label>Income</label>
-                        <span id="total-income">0.00</span>
+
+                <div class="summary-card" id="summary-display">
+                    <div class="main-age" id="main-age-text">--</div>
+                    <div class="next-bday" id="next-bday-text">Next birthday in ...</div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><ion-icon name="star-outline"></ion-icon></div>
+                    <div class="stat-info">
+                        <label>Zodiac Sign</label>
+                        <span id="stat-zodiac">--</span>
                     </div>
-                    <div class="sum-box expense">
-                        <label>Expense</label>
-                        <span id="total-expense">0.00</span>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><ion-icon name="time-outline"></ion-icon></div>
+                    <div class="stat-info">
+                        <label>Day of Birth</label>
+                        <span id="stat-day">--</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><ion-icon name="heart-outline"></ion-icon></div>
+                    <div class="stat-info">
+                        <label>Est. Heartbeats</label>
+                        <span id="stat-hearts">--</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><ion-icon name="airplane-outline"></ion-icon></div>
+                    <div class="stat-info">
+                        <label>Orbit Count</label>
+                        <span id="stat-orbits">--</span>
                     </div>
                 </div>
             </div>
 
-            <div class="tool-card form-card">
-                <label>Add Transaction</label>
-                <div class="input-grid">
-                    <div class="field">
-                        <input type="text" id="desc" placeholder="What for? (e.g. Rent)">
+            <div class="detail-section">
+                <div class="tool-card breakdown-card">
+                    <label>Life Breakdown</label>
+                    <div class="breakdown-grid" id="breakdown-list">
+                        <!-- Breakdown items like total months, weeks, etc. -->
                     </div>
-                    <div class="field">
-                        <div class="amount-input">
-                            <span id="currency-symbol">$</span>
-                            <input type="number" id="amount" placeholder="0.00" step="0.01">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <select id="cat">
-                            <option value="Food">Food & Dining</option>
-                            <option value="Transport">Transport</option>
-                            <option value="Health">Healthcare</option>
-                            <option value="Leisure">Entertainment</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="type-selector">
-                    <button class="type-btn active" data-type="expense">Expense</button>
-                    <button class="type-btn" data-type="income">Income</button>
-                </div>
-                <button onclick="addExpense()" class="btn primary-btn">
-                    <ion-icon name="add-circle-outline"></ion-icon> Save Transaction
-                </button>
-            </div>
-
-            <div class="tool-card list-card">
-                <div class="list-header">
-                    <label>Recent Transactions</label>
-                    <button id="clear-all" class="text-btn">Clear All</button>
-                </div>
-                <div class="expense-list" id="list">
-                    <!-- Transactions generated here -->
                 </div>
             </div>
         </div>

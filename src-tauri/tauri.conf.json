@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Expense Tracker",
+  "productName": "Age Calculator",
   "version": "0.1.0",
-  "identifier": "fossarium.expensetracker",
+  "identifier": "fossarium.agecalculator",
   "build": {
     "frontendDist": "../web",
     "devUrl": "http://localhost:3000"
@@ -10,7 +10,7 @@
   "app": {
     "windows": [
       {
-        "title": "Expense Tracker",
+        "title": "Age Calculator",
         "width": 800,
         "height": 600,
         "resizable": true,

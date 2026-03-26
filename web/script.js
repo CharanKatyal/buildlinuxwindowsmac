@@ -1,117 +1,112 @@
-let expenses = JSON.parse(localStorage.getItem("fossarium-expenses") || "[]");
-let currentType = 'expense';
-let currency = localStorage.getItem("fossarium-currency") || 'USD';
-let symbol = '$';
+const dobInput = document.getElementById("dob");
+const mainAgeText = document.getElementById("main-age-text");
+const nextBdayText = document.getElementById("next-bday-text");
+const statZodiac = document.getElementById("stat-zodiac");
+const statDay = document.getElementById("stat-day");
+const statHearts = document.getElementById("stat-hearts");
+const statOrbits = document.getElementById("stat-orbits");
+const breakdownList = document.getElementById("breakdown-list");
 
-const currencySelect = document.getElementById('currency-select');
-currencySelect.value = currency;
+function getZodiacSign(day, month) {
+    const zodiacSigns = [
+        { sign: "Capricorn", start: [1, 1], end: [1, 19] },
+        { sign: "Aquarius", start: [1, 20], end: [2, 18] },
+        { sign: "Pisces", start: [2, 19], end: [3, 20] },
+        { sign: "Aries", start: [3, 21], end: [4, 19] },
+        { sign: "Taurus", start: [4, 20], end: [5, 20] },
+        { sign: "Gemini", start: [5, 21], end: [6, 20] },
+        { sign: "Cancer", start: [6, 21], end: [7, 22] },
+        { sign: "Leo", start: [7, 23], end: [8, 22] },
+        { sign: "Virgo", start: [8, 23], end: [9, 22] },
+        { sign: "Libra", start: [9, 23], end: [10, 22] },
+        { sign: "Scorpio", start: [10, 23], end: [11, 21] },
+        { sign: "Sagittarius", start: [11, 22], end: [12, 21] },
+        { sign: "Capricorn", start: [12, 22], end: [12, 31] }
+    ];
 
-function updateCurrency() {
-    const selected = currencySelect.options[currencySelect.selectedIndex];
-    currency = selected.value;
-    symbol = selected.dataset.symbol;
-    localStorage.setItem("fossarium-currency", currency);
-    document.getElementById('currency-symbol').textContent = symbol;
-    render(); // Re-render to update all amounts
-}
-
-updateCurrency(); // Set initial symbol and format
-
-const typeBtns = document.querySelectorAll('.type-btn');
-typeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        typeBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentType = btn.dataset.type;
-    });
-});
-
-function formatCurrency(val) {
-    try {
-        return new Intl.NumberFormat(undefined, { // Let browser decide locale for number formatting
-            style: 'currency',
-            currency: currency,
-            currencyDisplay: 'symbol'
-        }).format(val);
-    } catch(e) {
-        // Fallback for unsupported currencies
-        return `${symbol}${val.toFixed(2)}`;
+    for (const zodiac of zodiacSigns) {
+        if ((month === zodiac.start[0] && day >= zodiac.start[1]) || (month === zodiac.end[0] && day <= zodiac.end[1])) {
+            return zodiac.sign;
+        }
     }
+    return "--";
 }
 
-function save() {
-    localStorage.setItem("fossarium-expenses", JSON.stringify(expenses));
-    render();
-}
+function calculateAge() {
+    const birthDate = new Date(dobInput.value);
+    if (isNaN(birthDate)) return;
 
-function addExpense() {
-    const desc = document.getElementById("desc").value.trim();
-    const amtInput = document.getElementById("amount");
-    const amt = parseFloat(amtInput.value);
-    const cat = document.getElementById("cat").value;
-
-    if (!desc || isNaN(amt) || amt <= 0) {
-        amtInput.focus();
+    const now = new Date();
+    if (birthDate > now) {
+        mainAgeText.textContent = "Future Born?";
         return;
     }
 
-    expenses.unshift({
-        desc,
-        amt: currentType === 'expense' ? -amt : amt,
-        cat,
-        type: currentType,
-        date: new Date().toISOString()
-    });
+    let years = now.getFullYear() - birthDate.getFullYear();
+    let months = now.getMonth() - birthDate.getMonth();
+    let days = now.getDate() - birthDate.getDate();
 
-    document.getElementById("desc").value = "";
-    amtInput.value = "";
-    save();
-}
-
-function deleteExpense(index) {
-    expenses.splice(index, 1);
-    save();
-}
-
-document.getElementById('clear-all').addEventListener('click', () => {
-    if (confirm("This will delete all transactions. Are you sure?")) {
-        expenses = [];
-        save();
+    if (days < 0) {
+        months--;
+        const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += lastMonth.getDate();
     }
-});
-
-function render() {
-    const totalIncome = expenses.filter(e => e.amt > 0).reduce((s, e) => s + e.amt, 0);
-    const totalExpense = Math.abs(expenses.filter(e => e.amt < 0).reduce((s, e) => s + e.amt, 0));
-    const balance = totalIncome - totalExpense;
-
-    document.getElementById("total-balance").textContent = formatCurrency(balance);
-    document.getElementById("total-income").textContent = formatCurrency(totalIncome);
-    document.getElementById("total-expense").textContent = formatCurrency(totalExpense);
-
-    const listEl = document.getElementById("list");
-    if (expenses.length === 0) {
-        listEl.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted); font-weight:600;">No transactions yet. Add one to get started!</div>';
-        return;
+    if (months < 0) {
+        years--;
+        months += 12;
     }
 
-    listEl.innerHTML = expenses.map((e, i) => `
-        <div class="expense-item ${e.type}">
-            <div class="expense-info">
-                <span class="expense-desc">${e.desc}</span>
-                <div class="expense-meta">
-                    <span class="expense-cat">${e.cat}</span>
-                    <span class="expense-date">${new Date(e.date).toLocaleDateString()}</span>
-                </div>
-            </div>
-            <div class="expense-right">
-                <span class="expense-amt">${e.amt > 0 ? '+' : ''}${formatCurrency(Math.abs(e.amt))}</span>
-                <div class="del-btn" onclick="deleteExpense(${i})" title="Delete">
-                    <ion-icon name="trash-outline"></ion-icon>
-                </div>
-            </div>
+    // Main display
+    mainAgeText.innerHTML = `${years}y ${months}m ${days}d`;
+
+    // Stats
+    const totalDays = Math.floor((now - birthDate) / (1000 * 60 * 60 * 24));
+    const totalWeeks = Math.floor(totalDays / 7);
+    const totalMonths = years * 12 + months;
+    const totalHours = totalDays * 24;
+    const totalMinutes = totalHours * 60;
+    const totalSeconds = totalMinutes * 60;
+
+    statZodiac.textContent = getZodiacSign(birthDate.getDate(), birthDate.getMonth() + 1);
+    statDay.textContent = birthDate.toLocaleDateString('en-US', { weekday: 'long' });
+    
+    // Fun facts
+    const avgHeartRate = 72; // bpm
+    const estimatedHearts = totalMinutes * avgHeartRate;
+    statHearts.textContent = formatNumber(estimatedHearts);
+    statOrbits.textContent = years;
+
+    // Next Birthday
+    const nextBirthday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+    if (nextBirthday < now) {
+        nextBirthday.setFullYear(now.getFullYear() + 1);
+    }
+    const diff = nextBirthday - now;
+    const daysToBday = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    nextBdayText.textContent = daysToBday === 0 ? "Today is your birthday! 🎉" : `Next birthday in ${daysToBday} days`;
+
+    // Breakdown
+    const breakdownData = [
+        { label: "Total Months", val: totalMonths },
+        { label: "Total Weeks", val: totalWeeks },
+        { label: "Total Days", val: totalDays },
+        { label: "Total Hours", val: totalHours },
+        { label: "Total Minutes", val: totalMinutes },
+        { label: "Total Seconds", val: totalSeconds }
+    ];
+
+    breakdownList.innerHTML = breakdownData.map(item => `
+        <div class="breakdown-item">
+            <span class="br-label">${item.label}</span>
+            <span class="br-val">${formatNumber(item.val)}</span>
         </div>
-    `).join("");
+    `).join('');
+}
+
+function formatNumber(num) {
+    if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+    if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+    return num.toLocaleString();
 }
 
 function initTheme() {
@@ -146,8 +141,6 @@ function initTheme() {
     });
 }
 
-currencySelect.addEventListener('change', updateCurrency);
+dobInput.addEventListener("input", calculateAge);
 initTheme();
-render();
-window.deleteExpense = deleteExpense;
-window.addExpense = addExpense;
+calculateAge();

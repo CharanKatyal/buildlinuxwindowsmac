@@ -1,5 +1,5 @@
 {
-  "name": "expense-tracker",
+  "name": "age-calculator",
   "version": "1.0.0",
   "main": "script.js",
   "scripts": {
@@ -7,6 +7,6 @@
   },
   "keywords": ["FOSS", "FOSSarium"],
   "author": "FOSSarium",
-  "license": "ISC",
-  "description": "FOSSarium's one more app"
+  "license": "FOSSarium",
+  "description": "Precision age calculation with detailed life milestones and fun facts."
 }
