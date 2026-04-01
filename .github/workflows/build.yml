@@ -67,25 +67,3 @@ jobs:
             - .dmg: Open and drag to Applications
           releaseDraft: false
           prerelease: false
-
-      # Create Windows portable EXE
-      - name: Create Windows portable exe
-        if: matrix.platform == 'windows-latest'
-        shell: pwsh
-        run: |
-          $exe = Get-ChildItem "src-tauri\target\release\*.exe" | Where-Object { $_.Name -notlike "*setup.exe" } | Select-Object -First 1
-          if ($exe) {
-            Copy-Item $exe.FullName "app-portable.exe"
-          } else {
-            Write-Error "No base executable found"
-          }
-
-      # Upload portable EXE to release
-      - name: Upload Windows portable exe
-        if: matrix.platform == 'windows-latest'
-        uses: softprops/action-gh-release@v2
-        with:
-          tagName: v0.1.0
-          files: app-portable.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
