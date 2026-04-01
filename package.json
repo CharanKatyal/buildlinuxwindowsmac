@@ -1,11 +1,14 @@
 {
-  "name": "age-calculator",
+  "name": "fossarium.agemaster",
   "version": "1.0.0",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["FOSS", "FOSSarium"],
+  "keywords": [
+    "FOSS",
+    "FOSSarium"
+  ],
   "author": "FOSSarium",
   "license": "FOSSarium License",
   "description": "Precision age calculation with detailed life milestones and fun facts."

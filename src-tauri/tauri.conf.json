@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Age Calculator",
-  "version": "0.1.0",
-  "identifier": "fossarium.agecalculator",
+  "productName": "Age Master",
+  "version": "1.0.0",
+  "identifier": "fossarium.agemaster",
   "build": {
     "frontendDist": "../web",
     "devUrl": "http://localhost:3000"
@@ -10,7 +10,7 @@
   "app": {
     "windows": [
       {
-        "title": "Age Calculator",
+        "title": "Age Master",
         "width": 800,
         "height": 600,
         "resizable": true,
